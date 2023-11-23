@@ -1,25 +1,66 @@
-from sqlalchemy_serializer import SerializerMixin
+from flask import Flask, jsonify, request, session
+from flask_cors import CORS, cross_origin
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    login_user,
+    login_required,
+    logout_user,
+    current_user,
+)
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import validates
 from config import db
-from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey, Table, Float, DateTime, String, Integer, Column
 from datetime import datetime
 
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "your_secret_key"  # Replace with a secure secret key
+CORS(app)
 
-class User(db.Model, SerializerMixin):
+login_manager = LoginManager(app)
+login_manager.login_view = (
+    "login"  # Set the login view to the endpoint of your login route
+)
+
+
+# Replace this with your actual user model
+class User(db.Model, UserMixin):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    username = Column(String, unique=True, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password_hash = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-  
+    @validates("email")
+    def validate_email(self, key, address):
+        assert "@" in address
+        return address
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
         return {"id": self.id, "username": self.username, "email": self.email}
 
-    def __repr__(self):
-        return f"<User(id={self.id}, username={self.username}, email={self.email})>"
+    def get_id(self):
+        return str(self.id)
+
+    def is_authenticated(self):
+        return True  # You can add custom authentication logic if needed
+
+    def is_active(self):
+        return True  # You can add custom activation logic if needed
+
+    def is_anonymous(self):
+        return False
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
