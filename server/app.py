@@ -108,5 +108,21 @@ def register_user():
     return jsonify(user_dict), 201
 
 
+@app.route("/user", methods=["GET"])
+@login_required
+@cross_origin()
+def get_user_by_id():
+    # You can access the current logged-in user using current_user
+    user = current_user
+
+    # If the user does not exist (which should not happen due to @login_required),
+    # you can return an appropriate error message
+    if not user:
+        return jsonify({"message": "User does not exist!"}), 400
+
+    # If the user is found, return the user's details with a 200 OK status
+    return jsonify(user.to_dict()), 200
+
+
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

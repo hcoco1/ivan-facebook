@@ -12,8 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import validates
 from config import db
 from datetime import datetime
-
-
+from hashlib import md5
 
 
 # Replace this with your actual user model
@@ -39,7 +38,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
-        return {"id": self.id, "username": self.username, "email": self.email}
+        return {"id": self.id, "name": self.name, "username": self.username, "email": self.email}
 
     def get_id(self):
         return str(self.id)
@@ -53,5 +52,7 @@ class User(db.Model, UserMixin):
     def is_anonymous(self):
         return False
 
-
-
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)

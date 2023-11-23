@@ -1,7 +1,7 @@
 
 import { NavLink} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { FaHome, FaSignInAlt, FaSignOutAlt, FaListOl, FaIcons, FaShoppingCart } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import api from '../components/api';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,11 +14,11 @@ const Button = styled.button`
   border-radius: 3px;
   border: 2px solid #BF4F74;
   color: #BF4F74;
-  margin: 0 1em;
-  padding: 0.25em 0.75em;
+  margin: 1em 1em;
+  padding: 0.50em 0.75em;
 `;
 
-// ... (other imports)
+
 
 function NavigationBar() {
     const dispatch = useDispatch();
@@ -67,7 +67,7 @@ function NavigationBar() {
                                     };
                                 }}
                             >
-                                <FaSignOutAlt /> Hi, {user.name}
+                                <FaSignOutAlt /> Hi, {user.username}
                             </NavLink>
                         ) : (
                             <>

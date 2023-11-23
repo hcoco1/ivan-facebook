@@ -5,6 +5,7 @@ import UserRegister from "../pages/UserRegister";
 import UserLogin from "../pages/UserLogin";
 import NoMatch from "./NoMatch";
 import NavBar from "./NavBar";
+import UserDetails from "../pages/UserDetails";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<UserRegister />} />
         <Route path="/login" element={<UserLogin />} />
+        <Route path="/user" element={<UserDetails />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>

@@ -117,9 +117,9 @@ function UserLogin() {
                                 console.log("Logged in as:", user);
                                 dispatch(setUser(user)); // Dispatch the setUser action
                             
-                                setLoginMessage('Login successful! Redirecting to products page...');
+                                setLoginMessage('Login successful! Redirecting to user page...');
                                 setTimeout(() => {
-                                    navigate('/');
+                                    navigate('/user');
                                 }, 3000);
                             }
                         })
