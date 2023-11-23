@@ -17,11 +17,22 @@ from flask_login import (
 )
 
 # Local imports
-from config import app, db, api
+from config import app, db, migrate, api, cors, login
 from models import User
 
+login_manager = LoginManager()
+login_manager.login_view = (
+    "login"  # Set the login view to the endpoint of your login route
+)
+login_manager.init_app(app)  # Initialize login manager with the Flask app
+
 app.secret_key = "my_super_secret_key_that_should_be_random_and_secure"
+
+
 # Views go here!
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(User).get(int(user_id))
 
 
 @app.route("/")
@@ -53,10 +64,20 @@ def login_user_custom():
     return jsonify(user.to_dict()), 200
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET", "POST"])
+@login_required
 def logout():
-    logout_user()
-    return jsonify({"message": "Logout successful"})
+    # Check if it's a POST request, indicating a form submission
+    if request.method == "POST":
+        # Check if the user is already logged out
+        if current_user.is_authenticated:
+            logout_user()
+            return jsonify({"message": "Logout successful"})
+        else:
+            return jsonify({"message": "User is already logged out"})
+    else:
+        # If it's a GET request, handle it as usual for navigation
+        return jsonify({"message": "Visit this route with a POST request to logout"})
 
 
 @app.route("/register", methods=["POST"])

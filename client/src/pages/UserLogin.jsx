@@ -5,6 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 import api from '../components/api';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../features/counter/counterSlice';
 
 // Define styled components
 const StyledForm = styled(Form)`
@@ -71,9 +73,10 @@ const StyledErrorMessageStyle = styled(StyledMessage)`
 
 
 
-// ... (imports)
+
 
 function UserLogin() {
+    const dispatch = useDispatch();
     const [loginMessage, setLoginMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -112,6 +115,7 @@ function UserLogin() {
                                 setLoginMessage(user.message);
                             } else {
                                 console.log("Logged in as:", user);
+                                dispatch(setUser(user)); // Dispatch the setUser action
                             
                                 setLoginMessage('Login successful! Redirecting to products page...');
                                 setTimeout(() => {

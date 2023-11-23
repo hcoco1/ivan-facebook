@@ -13,14 +13,7 @@ from sqlalchemy.orm import validates
 from config import db
 from datetime import datetime
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "your_secret_key"  # Replace with a secure secret key
-CORS(app)
 
-login_manager = LoginManager(app)
-login_manager.login_view = (
-    "login"  # Set the login view to the endpoint of your login route
-)
 
 
 # Replace this with your actual user model
@@ -61,6 +54,4 @@ class User(db.Model, UserMixin):
         return False
 
 
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+
