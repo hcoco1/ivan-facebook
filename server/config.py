@@ -12,7 +12,12 @@ from flask_login import LoginManager
 # Local imports
 
 # Instantiate app, set attributes
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path="",
+    static_folder="../client/build",
+    template_folder="../client/build",
+)
 login = LoginManager(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

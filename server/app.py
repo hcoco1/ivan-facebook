@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-from flask import request, jsonify, redirect, url_for
+from flask import request, jsonify, render_template
 
 # Remote library imports
 from flask_cors import cross_origin
@@ -29,15 +29,17 @@ login_manager.init_app(app)  # Initialize login manager with the Flask app
 app.secret_key = "my_super_secret_key_that_should_be_random_and_secure"
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(int(user_id))
 
 
 @app.route("/")
-def index():
-    return "<h1>Project Server</h1>"
+@app.route("/productions/<int:id>")
+@app.route("/productions/<int:id>/edit")
+@app.route("/productions/new")
+def index(id=0):
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["POST"])
