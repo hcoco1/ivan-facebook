@@ -1,6 +1,6 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { selectUser, setUser } from '../features/counter/counterSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -58,9 +58,11 @@ const StyledErrorMessageStyle = styled(StyledMessage)`
 
 
 function UserDetails() {
+  const { name } = useParams();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -69,21 +71,25 @@ function UserDetails() {
         dispatch(setUser(response.data));
       } catch (error) {
         navigate('/login');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchUserData();
   }, [dispatch, navigate]);
 
-  // Check if user is null before accessing its properties
-  if (!user) {
-    // You might want to render a loading state or handle this case differently
+  if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>User not found</div>;
   }
 
   return (
     <UserDetailsContainer>
-      <UserTitle>Profile</UserTitle>
+      <UserTitle>Profile: {name}</UserTitle>
       <UserInfo><UserLabel>Name:</UserLabel> {user.name}</UserInfo>
       <UserInfo><UserLabel>Username:</UserLabel> {user.username}</UserInfo>
       <UserInfo><UserLabel>Email:</UserLabel> {user.email}</UserInfo>

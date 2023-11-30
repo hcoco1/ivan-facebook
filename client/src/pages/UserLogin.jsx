@@ -119,7 +119,7 @@ function UserLogin() {
                             
                                 setLoginMessage('Login successful! Redirecting to user page...');
                                 setTimeout(() => {
-                                    navigate('/user');
+                                    navigate('/user/{username}');
                                 }, 3000);
                             }
                         })

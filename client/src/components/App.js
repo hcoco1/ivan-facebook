@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<UserRegister />} />
         <Route path="/login" element={<UserLogin />} />
-        <Route path="/user" element={<UserDetails />} />
+        <Route path="/user/:username" element={<UserDetails />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>

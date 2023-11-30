@@ -29,7 +29,7 @@ login_manager.init_app(app)  # Initialize login manager with the Flask app
 app.secret_key = "my_super_secret_key_that_should_be_random_and_secure"
 
 
-# Views go here!
+
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(int(user_id))

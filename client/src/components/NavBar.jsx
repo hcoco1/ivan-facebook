@@ -1,11 +1,12 @@
 
 import { NavLink} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { FaHome, FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import api from '../components/api';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser, clearUser } from '../features/counter/counterSlice';
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 
 import './NavBar.css'
 
@@ -20,7 +21,8 @@ const Button = styled.button`
 
 
 
-function NavigationBar() {
+
+export default function NavigationBar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(selectUser);
@@ -37,79 +39,33 @@ function NavigationBar() {
             });
     }
 
-
     return (
-        <nav className="navbar navbar-dark bg-dark">
-            <div className="container" style={{ display: 'flex', justifyContent: 'center' }}>
-                <ul className="navbar-nav" style={{ flexDirection: 'row', alignItems: 'center', listStyleType: 'none' }}>
-                    <li className="nav-item" style={{ marginRight: '10px' }}>
-                        <NavLink
-                            to="."
-                            style={({ isActive, isPending }) => {
-                                return {
-                                    fontWeight: isActive ? "bold" : "",
-                                    color: isPending ? "red" : "white",
-                                };
-                            }}
-                        >
-                            <FaHome /> Home
-                        </NavLink>
-                    </li>
+        <Navbar bg="primary" data-bs-theme="dark">
+            <Nav.Item>
+                <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+            </Nav.Item>
 
-                    <li className="nav-item">
-                        {user ? (
-                            <NavLink
-                                to="/user"
-                                style={({ isActive, isPending }) => {
-                                    return {
-                                        fontWeight: isActive ? "bold" : "",
-                                        color: isPending ? "red" : "white",
-                                    };
-                                }}
-                            >
-                                <FaSignOutAlt /> Hi, {user.username}
-                            </NavLink>
-                        ) : (
-                            <>
-                                <NavLink
-                                    to="/login"
-                                    style={({ isActive, isPending }) => {
-                                        return {
-                                            fontWeight: isActive ? "bold" : "",
-                                            color: isPending ? "red" : "white",
-                                        };
-                                    }}
-                                >
-                                    <FaSignInAlt /> Sign In
-                                </NavLink>
-                                <NavLink
-                                    to="/register"
-                                    style={({ isActive, isPending }) => {
-                                        return {
-                                            fontWeight: isActive ? "bold" : "",
-                                            color: isPending ? "red" : "white",
-                                        };
-                                    }}
-                                >
-                                    <FaSignOutAlt /> Sign Up
-                                </NavLink>
-                            </>
-                        )}
-                    </li>
+            {user && user.username && (
+                <>
+                    <Nav.Item>
+                        <Nav.Link as={NavLink} to={`/user/${user.username}`}>Hi, {user.username}</Nav.Link>
+                    </Nav.Item>
+                    <Button variant="primary" onClick={handleLogout}>
+                        Sign Out
+                    </Button>
+                </>
+            )}
 
-                    {user && (
-                        <li className="nav-item">
-                            <Button $primary onClick={handleLogout}>
-                                Sign Out
-                            </Button>
-                        </li>
-                    )}
-                </ul>
-            </div>
-        </nav>
+            {!user && (
+                <>
+                    <Nav.Item>
+                        <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link as={NavLink} to="/register">Register</Nav.Link>
+                    </Nav.Item>
+                </>
+            )}
+        </Navbar>
     );
 }
-
-export default NavigationBar;
-
-
