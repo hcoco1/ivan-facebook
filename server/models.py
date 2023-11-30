@@ -36,10 +36,12 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def to_dict(self):
-        return {"id": self.id, "name": self.name, "username": self.username, "email": self.email}
-
+    
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode("utf-8")).hexdigest()
+        return "https://www.gravatar.com/avatar/{}?d=wavatar&s={}".format(digest, size)
+    
+    
     def get_id(self):
         return str(self.id)
 
@@ -51,8 +53,17 @@ class User(db.Model, UserMixin):
 
     def is_anonymous(self):
         return False
+    
 
-    def avatar(self, size):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "username": self.username,
+            "email": self.email,
+            "avatar": self.avatar(128),
+        }
+
+
+
+

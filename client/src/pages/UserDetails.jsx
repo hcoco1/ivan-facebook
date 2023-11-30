@@ -1,20 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { selectUser, setUser } from '../features/counter/counterSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import api from '../components/api';
+import Image from 'react-bootstrap/Image';
 
 
+// ... (previous imports)
 
-// Styled components for the user details
 const UserDetailsContainer = styled.div`
     width: 300px;
     margin: 50px auto;
     padding: 20px;
-    border-radius: 5px;
-    background-color: #f5f6f7;
+    border-radius: 10px;
+    background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
@@ -22,7 +22,8 @@ const UserTitle = styled.h2`
     font-size: 24px;
     color: #1877f2;
     margin-bottom: 15px;
-    font-weight: 500;
+    font-weight: 700;
+    text-align: center;
 `;
 
 const UserInfo = styled.p`
@@ -35,27 +36,26 @@ const UserLabel = styled.strong`
     color: #4b4f56;
     margin-right: 5px;
 `;
+
 const Button = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: px solid #BF4F74;
-  color: #BF4F74;
-  margin: 0 1em;
-  padding: 0.25em 1em;
+    background: #1877f2;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    margin: 10px 0;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
 `;
+
 const StyledMessage = styled.p`
-    color: #1877F2;  // Facebook blue color for success
-    font-size: 16px;  
+    color: #1877f2;
+    font-size: 16px;
     font-weight: bold;
-    text-align: center;  
-    margin-top: 20px;  
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
-
-const StyledErrorMessageStyle = styled(StyledMessage)`
-    color: #e74c3c;  // A red color for errors
-`;
-
 
 function UserDetails() {
   const { name } = useParams();
@@ -90,11 +90,15 @@ function UserDetails() {
   return (
     <UserDetailsContainer>
       <UserTitle>Profile: {name}</UserTitle>
+      <Image src={user.avatar + '&s=128'} roundedCircle className="mb-3" />
       <UserInfo><UserLabel>Name:</UserLabel> {user.name}</UserInfo>
       <UserInfo><UserLabel>Username:</UserLabel> {user.username}</UserInfo>
       <UserInfo><UserLabel>Email:</UserLabel> {user.email}</UserInfo>
+      <Button>Edit Profile</Button>
+      <StyledMessage>Connected on Facebook</StyledMessage>
     </UserDetailsContainer>
   );
 }
 
 export default UserDetails;
+

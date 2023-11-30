@@ -32,7 +32,7 @@ export default function NavigationBar() {
             .then(() => {
                 dispatch(clearUser());
                 console.log("Logout successful");
-                navigate("/");
+                navigate("/login");
             })
             .catch(err => {
                 console.error("Error during logout:", err);
