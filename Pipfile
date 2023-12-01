@@ -16,6 +16,7 @@ faker = "*"
 flask-login = "*"
 honcho = "*"
 gunicorn = "*"
+python-dotenv = "*"
+psycopg2 = "*"
 
 [requires]
-

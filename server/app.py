@@ -2,6 +2,7 @@
 
 # Standard library imports
 from flask import request, jsonify, render_template
+import os
 
 # Remote library imports
 from flask_cors import cross_origin
@@ -15,10 +16,16 @@ from flask_login import (
     logout_user,
     current_user,
 )
+from datetime import timedelta
+from dotenv import load_dotenv
 
 # Local imports
 from config import app, db, migrate, api, cors, login
 from models import User
+
+load_dotenv()
+app.secret_key = os.getenv("SECRET_KEY")
+app.permanent_session_lifetime = timedelta(days=7)
 
 login_manager = LoginManager()
 login_manager.login_view = (
@@ -26,7 +33,7 @@ login_manager.login_view = (
 )
 login_manager.init_app(app)  # Initialize login manager with the Flask app
 
-app.secret_key = "my_super_secret_key_that_should_be_random_and_secure"
+
 
 
 @login_manager.user_loader
@@ -127,4 +134,4 @@ def get_user_by_id():
 
 
 if __name__ == "__main__":
-    app.run(port=5555, debug=True)
+    app.run(port=5000, debug=True)

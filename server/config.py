@@ -1,4 +1,5 @@
 # Standard library imports
+import os
 
 # Remote library imports
 from flask import Flask
@@ -19,7 +20,8 @@ app = Flask(
     template_folder="../client/build",
 )
 login = LoginManager(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 
@@ -37,8 +39,4 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS
-cors = CORS(
-    app,
-    resources={r"/user/*": {"origins": "*", "methods": ["GET", "PATCH", "DELETE"]}},
-    supports_credentials=True,
-)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
